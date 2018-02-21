@@ -121,16 +121,18 @@ def brd_to_svg(boardpath, PIXELS_PER_MM, PAD_SHRINK_MM):
                             cy = c[0] * math.sin(erot) + c[1] * math.cos(erot)
                             c[0] = cx + ex
                             c[1] = cy + ey
+                            #convert mm to pixels and get full bounding box
                             pix_x = c[0] * PIXELS_PER_MM
                             pix_y = c[1] * PIXELS_PER_MM
                             if pix_x < svg_bbox[0][0]: svg_bbox[0][0] = pix_x
                             if pix_y < svg_bbox[0][1]: svg_bbox[0][1] = pix_y
                             if pix_x > svg_bbox[1][0]: svg_bbox[1][0] = pix_x
                             if pix_y > svg_bbox[1][1]: svg_bbox[1][1] = pix_y
-                        #Correctly placed bounding points for each pad of each element on the board    
+                        #Correctly placed points for each pad of each element on the board, in pixels
                         pads_dict[padsname] = coords
         svg_infix = ""
         for k,v in pads_dict.iteritems():
+            #build SVG polygon element tags, inverting y coordinates to match SVG coordinate system
             coords_string = ""
             for c in v:
                 coords_string += str(c[0] * PIXELS_PER_MM) + "," + str(svg_bbox[1][1] - c[1] * PIXELS_PER_MM) + " "
