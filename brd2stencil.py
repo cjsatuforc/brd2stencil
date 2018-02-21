@@ -1,6 +1,6 @@
-from optparse import OptionParser
-import math, sys, argparse
+import math
 import xml.etree.ElementTree as ET
+from optparse import OptionParser
 
 svg_prefix = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
