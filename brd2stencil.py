@@ -71,19 +71,16 @@ def brd_to_svg(boardpath, PIXELS_PER_MM, PAD_SHRINK_MM):
             for pkg in lib.findall('./packages/package'):
                 pkgname = pkg.get('name')
                 smds = pkg.findall('smd')
-                smdcnt = len(smds)
-                if smdcnt > 0:
+                if len(smds) > 0:
                     if libname not in smd_dict: smd_dict[libname] = {}
                     if pkgname not in smd_dict[libname]: smd_dict[libname][pkgname] = {}
-                    #print "'" + pkgname + "' in " + libname + " library has " + str(smdcnt) + " SMD pads."
                     for smd in smds:
                         rot = smd.get('rot')
                         if rot == None: rot = 0
                         else: rot = rot[1:]
                         smd_dict[libname][pkgname][smd.get('name')] = {"name":smd.get('name'), "x":float(smd.get('x')), "y":float(smd.get('y')), "dx":float(smd.get('dx')), "dy":float(smd.get('dy')), "rot":float(rot)}
                         pad = smd_dict[libname][pkgname][smd.get('name')]
-                        #print "\t" + smd.get('name') + "\t" + smd.get('x') + "\t" + smd.get('y') + "\t" + smd.get('dx') + "\t" + smd.get('dy') + "\t" + str(pad['rot'])
-
+                        
         #FIND ALL ELEMENTS MATCHING SMD DICT ON LIBRARY AND PACKAGE NAMES
         pads_dict = {}                
         svg_bbox = [[0,0],[0,0]]
