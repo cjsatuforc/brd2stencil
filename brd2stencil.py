@@ -59,6 +59,8 @@ svg_prefix = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 svg_suffix = "  </g>\n</svg>"
 
 def brd_to_svg(boardpath, layer, PIXELS_PER_MM, PAD_SHRINK_MM):
+    if boardpath[-4:].lower() != ".brd": raise SystemExit("File must be a .BRD file")
+    print "\nProcessing " + layer + " layer of BRD file " + boardpath + "..."
     layercode = 1
     if layer == "bottom": layercode = 16
     try:
@@ -143,8 +145,7 @@ def brd_to_svg(boardpath, layer, PIXELS_PER_MM, PAD_SHRINK_MM):
         svg_out.write(svg_text)
         svg_out.close()
         print "DONE"
-    except Exception as e:
-        print str(e)
+    except Exception as e: print str(e)
 
 def parse_rot(rotstr):
     rot = 0
@@ -166,31 +167,22 @@ def main():
     (options, args) = parser.parse_args()
 
     ppm = 3.543307 
-    if options.ppi != None:
-        ppm = float(options.ppi) / 25.4
+    if options.ppi != None: ppm = float(options.ppi) / 25.4
 
     shrink = 0.0508
-    if options.shr != None:
-        shrink = float(options.shr) * 0.0254
+    if options.shr != None: shrink = float(options.shr) * 0.0254
 
     layer = "top"
-    if options.layer == "b":
-        layer = "bottom"
+    if options.layer == "b": layer = "bottom"
     
     f = options.file
     F = options.folder
 
-    if f == None and F == None:
-        print "\n*You must specify a folder or a file..."
-        exit(0)
-    elif f == None:
-        print "\nFolder operations are not yet supported..."
-        exit(0)
-    elif F == None:
-        print "\nProcessing " + layer + " layer of BRD file " + f + "..."
-        brd_to_svg(f, layer, ppm, shrink)
+    if f == None and F == None:  raise SystemExit("\n*You must specify a folder or a file...")
+    elif f == None:  raise SystemExit("\nFolder operations are not yet supported...")
+    elif F == None:  brd_to_svg(f, layer, ppm, shrink)
     else:
-        print "\N* File and folder arguments detected. Defaulting to file. Processing " + layer + " layer of BRD file " + f + "..."
+        print "\N* File and folder arguments detected. Defaulting to file..."
         brd_to_svg(f, layer, ppm, shrink)
 
 if __name__ == '__main__':
